@@ -62,6 +62,8 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% =========================================================================
+%%%%%% Cost function computation  %%%%%
 % one hot encode the labels
 y_encoded = (y./[1:num_labels]) == 1;
 
@@ -84,11 +86,28 @@ for i=1:m,
 end;
 
 J = 1.0/m * J;
+% =========================================================================
+%%%%%% Regularization  %%%%%
 
+coeff_sum_sq = 0;
 
+[row,col] = size(Theta1);
+for i=1:row,
+	for j=2:col,
+		coeff_sum_sq += Theta1(i, j) ^ 2;
+	end;
+end;
 
+[row,col] = size(Theta2);
+for i=1:row,
+	for j=2:col,
+		coeff_sum_sq += Theta2(i, j) ^ 2;
+	end;
+end;
 
+J += (lambda/(2*m)) * coeff_sum_sq;
 
+% =========================================================================
 
 
 
@@ -97,7 +116,6 @@ J = 1.0/m * J;
 
 % -------------------------------------------------------------
 
-% =========================================================================
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
