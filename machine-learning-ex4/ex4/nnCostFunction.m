@@ -108,9 +108,39 @@ end;
 J += (lambda/(2*m)) * coeff_sum_sq;
 
 % =========================================================================
+%%%%%% BackPropagation  %%%%%
+delta1 = 0;
+delta2 = 0;
+
+for i=1:m,
+	% Get the ith training example and add the bias unit
+	xi = X(i, :)';
+	xi = [1; xi];
+	yi = y_encoded(i, :)';
+
+	% Feed forward implementation
+	z2 = Theta1 * xi;
+	a2 = sigmoid(z2);
+	z2 = [1; z2]; % is this right?
+	a2 = [1; a2];
+	z3 = Theta2 * a2;
+	hi = sigmoid(z3);
 
 
+	% Delta computations
+	d3 = hi - yi;
 
+	d2 = (Theta2' * d3) .* sigmoidGradient(z2);
+	d2 = d2(2: end);
+
+	delta1 += d2 * (xi)';
+
+	delta2 += d3 * (a2)';
+end;
+
+Theta1_grad = (1/m) * delta1;
+
+Theta2_grad = (1/m) * delta2;
 
 
 
